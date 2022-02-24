@@ -37,11 +37,6 @@ token_mapbox = os.getenv('MAPBOX_TOKEN')
     # -G is get Request
     # -o is the path from output pdf 
 
-### Response
-
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                    Dload  Upload   Total   Spent    Left  Speed
-    100 40198  100 40198    0     0   219k      0 --:--:-- --:--:-- --:--:--  220k
 
 ## Get GeoJSON from all states
 
@@ -51,19 +46,20 @@ token_mapbox = os.getenv('MAPBOX_TOKEN')
 
     curl -G http://localhost:8080/states/
 
-### Response
+## Register new User
 
-    GET /states/ HTTP/1.1
-    Host: localhost:8080
-    User-Agent: curl/7.79.1
-    Accept: */*
+### Request
 
-    HTTP 1.0, assume close after body
-    HTTP/1.0 200 OK
-    Content-Type: application/json
-    Content-Length: 116802
-    Server: Werkzeug/2.0.2 Python/3.7.11
-    Date: Thu, 24 Feb 2022 19:05:54 GMT
+`POST /users/signup`
 
-    {}
+    curl -d '{"name":"juan","email":"exampgmail.com","password":"mypassword"}' -H "Content-Type: application/json" -X POST http://localhost:8080/users/signup
+
+## Login User
+
+### Request
+
+`POST /users/login`
+
+    curl -d '{"name":"juan","password":"mypassword"}' -H "Content-Type: application/json" -X POST http://localhost:8080/users/login
+
 
