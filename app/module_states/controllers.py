@@ -35,6 +35,7 @@ def get_pdf( id_state ):
     state_object = db.session.query(State).get( id_state )
     if not state_object: return f'State not found with id {id_state} ', 400
     pdf = generate_pdf( state_object )
+    if not pdf: return f'Problem to generate PDF {id_state} ', 500
     response = make_response( pdf )
     response.headers['Content-Disposition'] = f'attachment; filename="{state_object.name}.pdf"'
     response.headers['Content-Type'] = 'application/pdf'

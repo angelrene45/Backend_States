@@ -25,7 +25,8 @@ def generate_pdf( state_object ):
     pdf.print_attribute(f'Type Geometry: {type_geom}')
 
     path_image = request_image_mapbox( id_state, data_geojson )
-    pdf.setImageGeoJSON( path_image )
+    if not path_image: return None
+    else: pdf.setImageGeoJSON( path_image )
     
     return pdf.output(dest="S", name=name).encode('latin-1') # generate pdf in memory
 
@@ -47,12 +48,33 @@ def request_image_mapbox( id_state, data_geojson ):
                 }
             ]
         }
-    geojson = json.dumps(geojson).replace(" ", "") # delete spaces
+    geojson = json.dumps(geojson).replace(" ", "") # convert diccionary in string and replace spaces
     geojson = urllib.parse.quote( geojson ) # convert string json in url encoded
     token_mapbox = os.getenv('MAPBOX_TOKEN') # get token from env 
     api_request = f"""https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson({geojson})/auto/630x360?access_token={token_mapbox}"""
-    response = http.request("GET", api_request)
-    bytes_image = response.data # reponse is Image PNG
+    bytes_image = make_request_api( api_request )
+    if not bytes_image: return False
+    path_image = save_image(path_image, bytes_image)
+    if not path_image: return False
+    return path_image 
+
+def make_request_api( api_request ):
+    try:
+        response = http.request("GET", api_request, timeout=4.0)
+        if response.status != 200: return None
+        bytes_image = response.data # reponse is Image PNG
+        return bytes_image
+    except Exception as e:
+        print(f"Error in request API ")
+        print(f"{e}")
+        return None
+
+def save_image( path_image, bytes_image ):
     with open(path_image, 'wb') as f: # Save image in static files 
         f.write(bytes_image)
-    return path_image 
+
+    if os.path.exists( path_image ): return path_image
+    else: return False
+        
+   
+
