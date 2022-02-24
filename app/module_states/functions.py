@@ -33,10 +33,9 @@ def generate_pdf( state_object ):
     pdf.print_attribute(f'Type Geometry: {type_geom}')
 
     path_image = request_image_mapbox( id_state, data_geojson ) # Call API mapbox to create image from GeoJSON
-    if not path_image: return None
-    else: pdf.setImageGeoJSON( path_image )
-
-    delete_image( path_image )
+    if path_image:
+        pdf.setImageGeoJSON( path_image )
+        delete_image( path_image )
     
     return pdf.output(dest="S", name=name).encode('latin-1') # generate pdf in memory
 
@@ -87,7 +86,9 @@ def request_image_mapbox( id_state, data_geojson ):
 def make_request_api( api_request ):
     try:
         response = http.request("GET", api_request, timeout=4.0)
-        if response.status != 200: return None
+        if response.status != 200: 
+            print(response.data)
+            return None
         bytes_image = response.data # reponse is Image PNG
         return bytes_image
     except Exception as e:
