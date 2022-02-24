@@ -3,6 +3,7 @@ import json
 import datetime
 import urllib3
 import urllib.parse
+from flask import session
 
 from app import app
 from app.module_states.pdf_state import PDF_STATE
@@ -20,11 +21,14 @@ def generate_pdf( state_object ):
     data_geojson = json.loads(geojson) # convert string to diccionary
     type_geom  = data_geojson.get('type') # get type of geometry 
 
+    name_user = session['name'] if 'name' in session else 'Guess'
+
     pdf = PDF_STATE('P', 'mm', 'Letter') # crate Object from PDF
     pdf.title_header = name
     pdf.set_title(name)
-    pdf.set_author('angel.calzada')
+    pdf.set_author(name_user)
     pdf.add_page()
+    pdf.print_attribute(f'User Name: {name_user}')
     pdf.print_attribute(f'ID: {id_state}')
     pdf.print_attribute(f'Type Geometry: {type_geom}')
 
