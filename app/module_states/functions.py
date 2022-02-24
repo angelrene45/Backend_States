@@ -1,6 +1,12 @@
+import os
 import json
+import urllib3
+import urllib.parse
 
-from  app.module_states.pdf_state import PDF_STATE
+from app import app
+from app.module_states.pdf_state import PDF_STATE
+
+http = urllib3.PoolManager()
 
 def generate_pdf( state_object ):
     id_state = state_object.id
@@ -17,5 +23,36 @@ def generate_pdf( state_object ):
     pdf.add_page()
     pdf.print_attribute(f'ID: {id_state}')
     pdf.print_attribute(f'Type Geometry: {type_geom}')
+
+    path_image = request_image_mapbox( id_state, data_geojson )
+    pdf.setImageGeoJSON( path_image )
     
     return pdf.output(dest="S", name=name).encode('latin-1') # generate pdf in memory
+
+
+def request_image_mapbox( id_state, data_geojson ):
+    path_image = os.path.join( app.config['STATIC_FOLDER'], 'states', f'{id_state}.png' )
+    
+    geojson =  {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "stroke": "#000000",
+                        "fill": "#005776",
+                        "fill-opacity": 1
+                    },
+                    "geometry": data_geojson
+                }
+            ]
+        }
+    geojson = json.dumps(geojson).replace(" ", "") # delete spaces
+    geojson = urllib.parse.quote( geojson ) # convert string json in url encoded
+    token_mapbox = os.getenv('MAPBOX_TOKEN') # get token from env 
+    api_request = f"""https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson({geojson})/auto/630x360?access_token={token_mapbox}"""
+    response = http.request("GET", api_request)
+    bytes_image = response.data # reponse is Image PNG
+    with open(path_image, 'wb') as f: # Save image in static files 
+        f.write(bytes_image)
+    return path_image 

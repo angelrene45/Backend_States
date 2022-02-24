@@ -32,4 +32,8 @@ class PDF_STATE(FPDF):
         # Times 12
         self.set_font('Times', '', 12)
         # Output justified text
-        self.cell(0, 10, txt = txt, border = 0, ln = 1, align = '', fill = False, link = '')        
+        self.cell(0, 10, txt = txt, border = 0, ln = 1, align = '', fill = False, link = '') 
+
+    def setImageGeoJSON(self, path_image ):
+        self.ln(10)
+        self.image(path_image, None, None, w = 0, h = 0)
