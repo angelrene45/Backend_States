@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 import urllib3
 import urllib.parse
 
@@ -30,6 +31,8 @@ def generate_pdf( state_object ):
     path_image = request_image_mapbox( id_state, data_geojson ) # Call API mapbox to create image from GeoJSON
     if not path_image: return None
     else: pdf.setImageGeoJSON( path_image )
+
+    delete_image( path_image )
     
     return pdf.output(dest="S", name=name).encode('latin-1') # generate pdf in memory
 
@@ -40,7 +43,8 @@ def request_image_mapbox( id_state, data_geojson ):
         Create and image from GeoJSON
     """
     # path where image save
-    path_image = os.path.join( app.config['STATIC_FOLDER'], 'states', f'{id_state}.png' )
+    suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S") # create at unique suffix
+    path_image = os.path.join( app.config['STATIC_FOLDER'], 'states', f'{id_state}_{suffix}.png' )
     
     # geojson request from mapbox API
     geojson =  {
@@ -64,7 +68,7 @@ def request_image_mapbox( id_state, data_geojson ):
     # Get mapbox token for request
     token_mapbox = os.getenv('MAPBOX_TOKEN')
     # Full url from api request
-    api_request = f"""https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson({geojson})/auto/630x360?access_token={token_mapbox}"""
+    api_request = f"""https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/geojson({geojson})/auto/550x360?access_token={token_mapbox}"""
     # Do request 
     bytes_image = make_request_api( api_request )
     # Validate response 
@@ -93,6 +97,15 @@ def save_image( path_image, bytes_image ):
 
     if os.path.exists( path_image ): return path_image
     else: return False
+
+def delete_image( path_image ):
+    try:
+        os.remove( path_image )
+        return True
+    except Exception as e:
+        print(f"Error to remove image {path_image}")
+        print(e)
+        return False
         
    
 
