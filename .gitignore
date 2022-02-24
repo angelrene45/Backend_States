@@ -26,7 +26,7 @@ htmlcov/
 *,cover
 
 # ignore database sqlite
-app_geo.db
+# app_geo.db
 
 # ignore images from states
 app/static/states
