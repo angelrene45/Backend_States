@@ -32,7 +32,7 @@ token_mapbox = os.getenv('MAPBOX_TOKEN')
 
 `GET /states/pdf/:id_state`
 
-    curl -G -o test.pdf http://localhost:8080/states/pdf/5/
+    curl -G -o test.pdf http://localhost:8080/states/pdf/5
 
     # -G is get Request
     # -o is the path from output pdf 
