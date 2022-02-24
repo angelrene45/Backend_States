@@ -24,3 +24,6 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
+
+# ignore database sqlite
+app_geo.db
