@@ -60,6 +60,6 @@ token_mapbox = os.getenv('MAPBOX_TOKEN')
 
 `POST /users/login`
 
-    curl -d '{"name":"juan","password":"mypassword"}' -H "Content-Type: application/json" -X POST http://localhost:8080/users/login
+    curl -d '{"email":"exampgmail.com","password":"mypassword"}' -H "Content-Type: application/json" -X POST http://localhost:8080/users/login
 
 
