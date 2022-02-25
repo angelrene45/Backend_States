@@ -25,7 +25,7 @@ CSRF_ENABLED     = True
 
 # Use a secure, unique and absolutely secret key for
 # signing the data. 
-CSRF_SESSION_KEY = "secret"
+CSRF_SESSION_KEY = os.environ.get('SECRET_KEY')
 
 # Secret key for signing cookies
-SECRET_KEY = "secret"
+SECRET_KEY = os.environ.get('SECRET_KEY')

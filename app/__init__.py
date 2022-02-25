@@ -4,6 +4,12 @@ from flask import Flask, render_template
 # Import SQLAlchemy
 from flask_sqlalchemy import SQLAlchemy
 
+# Import env vars
+from dotenv import load_dotenv
+
+# define the envs variable
+load_dotenv('env/.env')
+
 # Define the WSGI application object
 app = Flask(__name__)
 
