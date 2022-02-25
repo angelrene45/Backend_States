@@ -28,7 +28,7 @@ def not_found(error):
 # Index Page
 @app.route('/')
 def index():
-    return f"Welcome to API states {os.getenv('SECRET_KEY')} {os.getenv('MAPBOX_TOKEN')}", 200
+    return f"Welcome to API states", 200
 
 # Import a module / component using its blueprint handler variable (mod_auth)
 from app.module_users.controllers import users as users_module
