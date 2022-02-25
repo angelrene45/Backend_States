@@ -8,7 +8,9 @@ from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
 # define the envs variable
-load_dotenv('env/.env')
+from config import BASE_DIR
+import os
+load_dotenv(os.path.join(BASE_DIR, 'env', '.env'))
 
 # Define the WSGI application object
 app = Flask(__name__)
