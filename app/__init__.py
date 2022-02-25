@@ -6,8 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 # Import env vars
 from dotenv import load_dotenv
-
-# define the envs variable
 from config import BASE_DIR
 import os
 load_dotenv(os.path.join(BASE_DIR, 'env', '.env'))
@@ -26,6 +24,11 @@ db = SQLAlchemy(app)
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
+
+# Index Page
+@app.route('/')
+def index():
+    return f"Welcome to API states {os.getenv('SECRET_KEY')} {os.getenv('MAPBOX_TOKEN')}", 200
 
 # Import a module / component using its blueprint handler variable (mod_auth)
 from app.module_users.controllers import users as users_module
