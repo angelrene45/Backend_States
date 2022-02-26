@@ -1,4 +1,4 @@
-# ![logo](/app/static/logo.png) Mexico States 
+# ![logo](/app/static/logo.png) Mexico States (Flask Project)
 
 Mexico states is a API that download pdf from state or get GEOJSON from all states
 
