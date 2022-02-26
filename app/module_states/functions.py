@@ -1,14 +1,12 @@
 import os
 import json
 import datetime
-import urllib3
+import requests
 import urllib.parse
 from flask import session
 
 from app import app
 from app.module_states.pdf_state import PDF_STATE
-
-http = urllib3.PoolManager()
 
 def generate_pdf( state_object ):
     """
@@ -85,11 +83,11 @@ def request_image_mapbox( id_state, data_geojson ):
 
 def make_request_api( api_request ):
     try:
-        response = http.request("GET", api_request, timeout=4.0)
-        if response.status != 200: 
-            print(response.data)
+        response = requests.get(api_request, timeout=4.0)
+        if response.status_code != 200: 
+            print(response.content)
             return None
-        bytes_image = response.data # reponse is Image PNG
+        bytes_image = response.content # reponse is Image PNG
         return bytes_image
     except Exception as e:
         print(f"Error in request API ")
