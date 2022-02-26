@@ -29,4 +29,4 @@ htmlcov/
 # app_geo.db
 
 # ignore images from states
-app/static/states
+app/static/states/*.png
