@@ -1,6 +1,10 @@
-# Mexico States 
+# ![logo](/app/static/logo.png) Mexico States 
 
 Mexico states is a API that download pdf from state or get GEOJSON from all states
+
+## Example PDF 
+For create the PDF use PyFPDF and the picture is a static image that generate with a GeoJSON in the API Mapbox  
+![PDF](/app/static/pdf_test.png)
 
 ## Installation
 
